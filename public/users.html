@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>World chat!</title>
+	<link rel="stylesheet" type="text/css" href="/css/xmartpushapp.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap-responsive.min.css" media="all" />
+</head>
+<body>	
+	<div class="navbar">
+		<div class="navbar-inner">
+			<a href="#" class="brand">World Chat</a>
+			<ul class="nav">
+				<li><a href="/">Chat Room</a></li>
+				<li class="active"><a href="/users.html">Connected Users</a></li>
+			</ul>			
+			<div class="navbar-form form-search pull-right">
+			  <input type="search" placeholder="Filter..." class="input-medium search-query">
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">	
+			<h2>People currently connected...</h2>
+		</div>
+		<div class="row-fluid">				
+			<table class="table table-striped">
+			  <thead>
+			    <tr>
+			      <th>Name</th>
+			      <th>Connected</th>
+			    </tr>
+			  </thead>
+			  <tbody id="usersTable">
+			  </tbody>
+			</table>
+		</div>
+	</div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<!-- <script type="text/javascript" src="/js/xmartlocatorusers.js"></script> -->
+<script>
+	var socket = io.connect(window.location.origin);
+
+	socket.on("user disconnected", function(key){
+		$("#user"+key).remove();
+	});
+
+	socket.on("all locations", function(data){
+		for(key in data){
+			var row = $("<tr id='user"+data.key"'>");
+			$("<td>").html(data.username);
+			$("<td>").html(data.username);
+		}
+	});
+
+	socket.emit("request locations");
+</script>
+</html>

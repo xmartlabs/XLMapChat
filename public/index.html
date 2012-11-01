@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>World chat!</title>
+	<link rel="stylesheet" type="text/css" href="/css/xmartpushapp.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap-responsive.min.css" media="all" />
+</head>
+<body>	
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container">
+				<a href="#" class="brand">World Chat</a>
+				<ul class="nav">
+					<li class="active"><a href="/">Chat Room</a></li>
+					<li><a href="/users.html">Connected Users</a></li>
+				</ul>
+				<p id="userGreeting" class="navbar-text pull-right"></p>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="row-fluid">	
+			<div id="channelForm" class="form-inline">
+				<label for="nameBox">Please write your name </label>
+				<input type="text" id="nameBox"/>
+				<button id="createChannel" class="btn" type="submit">Enter chat</button>
+			</div>
+		</div>
+		<div class="row-fluid">				
+			<div id="map_canvas" class="span8" style="min-height: 500px;"></div>
+			<div id="chatContainer" class="chat-container span4"></div>			
+		</div>
+	</div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVPtUwnFXt0-wEylg3qIQUaBoS2RAv5CE&sensor=true">
+</script>
+<script type="text/javascript" src="/js/xmartlocator.js"></script>
+<script type="text/javascript" src="/js/xmartchat.js"></script>
+<script type="text/javascript" src="/js/autogrow.js"></script>
+<script>
+	var socket = io.connect(window.location.origin);
+
+	function getUrlParameter(name){
+  	if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search)) {
+      return decodeURIComponent(name[1]);
+    }
+	}
+
+	function loadWorldChat(username){		
+		$('#channelForm').remove();
+		$("#userGreeting").html("Hello "+username+"!");
+
+		xmartlabschat.initialize(socket, username, "chatContainer");    
+		xmartlabslocator.initialize(socket,'map_canvas');
+
+		socket.emit('register', { username : username });
+	}
+
+	var username = getUrlParameter("username");
+	if(username) {
+		loadWorldChat(username);
+	}else{		
+		$('#createChannel').on('click',function(){
+			username = $("#nameBox").val();
+			loadWorldChat(username);
+		});
+	}   
+</script>
+</html>
