@@ -6,12 +6,12 @@ var xmartlabschat = {};
 		webSocket = socket;
 		userName = usrname;
 
-		createChatWindow();
+		createChatWindow(containerId);
 
 		webSocket.on('chat', receiveChatMessage);
 	}
 
-	function createChatWindow(){
+	function createChatWindow(containerId){
 		var chatContainer = $("#"+containerId);
 
 		$("<div>").addClass("chat-header").html("Live chat").appendTo(chatContainer);

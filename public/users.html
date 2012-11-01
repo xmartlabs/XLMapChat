@@ -44,16 +44,22 @@
 <!-- <script type="text/javascript" src="/js/xmartlocatorusers.js"></script> -->
 <script>
 	var socket = io.connect(window.location.origin);
+	var users = {};
 
 	socket.on("user disconnected", function(key){
 		$("#user"+key).remove();
+		delete users[key];
 	});
 
 	socket.on("all locations", function(data){
+		var usersTable = $("#usersTable");
 		for(key in data){
-			var row = $("<tr id='user"+data.key"'>");
-			$("<td>").html(data.username);
-			$("<td>").html(data.username);
+			var user = data[key];
+			var row = $("<tr id='user"+key+"'>");
+			$("<td>").html(user.username).appendTo(row);
+			$("<td>").html("Yes").appendTo(row);
+			usersTable.append(row);
+			users[key] = user;
 		}
 	});
 
