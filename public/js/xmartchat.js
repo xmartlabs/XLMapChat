@@ -58,8 +58,8 @@ var xmartlabschat = {};
 	}
 
 	function sendChatMessage() {
-		var messageVal = messageBox.val().replace(/\n/g,"<br/>");
-		if(messageVal){
+		if(/\S/.test(messageBox.val())){
+			var messageVal = messageBox.val().replace(/\n/g,"<br/>");
 			messageBox.val('');		
 			addChatMessage(userName, messageVal);
 

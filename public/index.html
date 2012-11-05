@@ -52,7 +52,7 @@
 <script type="text/javascript" src="/js/xmartchat.js"></script>
 <script type="text/javascript" src="/js/autogrow.js"></script>
 <script>
-	var socket = io.connect(window.location.origin);
+	var socket = io.connect(window.location.hostname);
 
 	function getUrlParameter(name){
   	if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search)) {
