@@ -1,3 +1,17 @@
+body { 
+	padding-top: 65px;	
+}
+
+.xmart-logo {
+	height: 18px;
+	margin-top: -4px;
+}
+
+.navbar-xmartlabs.navbar-inner {
+	background: url("../img/background.png");
+	border-bottom:6px solid #08C !important;
+}
+
 .chat-container {
     margin-top:-20px;
 }
@@ -71,8 +85,4 @@
 
 #map_canvas {
 	margin-bottom: 20px;
-}
-
-body { 
-	padding-top: 60px;	
 }
