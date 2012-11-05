@@ -34,7 +34,7 @@ var xmartlabschat = {};
 		sendButton.on('click', sendChatMessage);	
 	}
 
-	function addChatMessage(user, msg) {
+	function addChatMessage(user, key, msg) {
 		var backToBottom = 
 			messagesListContainer[0].scrollHeight - messagesListContainer.scrollTop() - messagesListContainer.outerHeight() < 5;
 
@@ -43,7 +43,7 @@ var xmartlabschat = {};
 
 		message.append("<span class='message-date'>"+getHoursAndMinutes()+"</span>");
 
-		message.append("<span class='sender'>"+user+"</span>");
+		$("<span class='sender btn-link'>"+user+"</span>").data('key',key).appendTo(message);
 		message.append("<p>"+msg+"</p>");
 
 		messagesList.append(message);
@@ -54,15 +54,14 @@ var xmartlabschat = {};
 	}
 
 	function receiveChatMessage(data) {
-		addChatMessage(data.sender, data.message);
+		addChatMessage(data.sender, data.key, data.message);
 	}
 
 	function sendChatMessage() {
 		if(/\S/.test(messageBox.val())){
 			var messageVal = messageBox.val().replace(/\n/g,"<br/>");
 			messageBox.val('');		
-			addChatMessage(userName, messageVal);
-
+			addChatMessage(userName, "Me", messageVal);
 			webSocket.send(messageVal);
 		}
 	}

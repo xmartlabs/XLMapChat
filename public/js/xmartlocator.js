@@ -14,12 +14,18 @@ var xmartlabslocator = {};
 		};
 
 		map = new google.maps.Map(document.getElementById(mapId), mapOptions);
-		showUserLocation();
+		if(navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(showPosition, errorHandler);
+		} else {
+			alert("Geolocation is not supported by this browser.");
+		}
 
 		webSocket.on('location', updateMarker);
 		webSocket.on('all locations', loadMarkers);
 		webSocket.on('user disconnected', removeMarker);
 		webSocket.emit('request locations');
+
+		$(document).on('click', ".sender", showUserLocation);
 	}
 
 	function getGeolocationErrorMessage(error) {
@@ -37,14 +43,6 @@ var xmartlabslocator = {};
 
 	function errorHandler(error) {
 		alert(getGeolocationErrorMessage(error));
-	}
-
-	function showUserLocation() {
-		if(navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(showPosition, errorHandler);
-		} else {
-			alert("Geolocation is not supported by this browser.");
-		}
 	}
 
 	function addMarker(lat, lng, title) {
@@ -67,6 +65,16 @@ var xmartlabslocator = {};
 		webSocket.emit("location update",data);
 	}
 
+	function showUserLocation(event){
+		event.preventDefault();
+		var userMarker = markers[$(event.currentTarget).data("key")];
+		if(userMarker) {			
+			map.setCenter(userMarker.getPosition());
+		} else {
+			map.setCenter(myMarker.getPosition());
+		}
+	}
+
 	function updateMarker(data) {
 		var marker = markers[data.userKey];
 
@@ -74,8 +82,8 @@ var xmartlabslocator = {};
 			marker.setPosition(new google.maps.LatLng(data.lat,data.lng));			
 		} else {
 			marker = addMarker(data.lat, data.lng, data.username);
-			markers[data.userKey] = marker;
-		}
+		}		
+		markers[data.userKey] = marker;
 	}
 
 	function loadMarkers(data) {

@@ -60,6 +60,7 @@ webSocket.sockets.on('connection', function(socket) {
       var user = connectedUsers[key];
       if(user) {
         var data = new Object();
+        data.key = key;
         data.sender = user.username;
         data.message = msg;
         socket.broadcast.emit('chat',data);
