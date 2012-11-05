@@ -9,19 +9,26 @@
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap-responsive.min.css" media="all" />
 </head>
 <body>	
-	<div class="navbar">
+	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+       	</a>
 				<a href="#" class="brand">World Chat</a>
-				<ul class="nav">
-					<li class="active"><a href="/">Chat Room</a></li>
-					<li><a href="/users.html">Connected Users</a></li>
-				</ul>
 				<p id="userGreeting" class="navbar-text pull-right"></p>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li class="active"><a href="/">Chat Room</a></li>
+						<li><a href="/users.html">Connected Users</a></li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
+	<div class="container">
 		<div class="row-fluid">	
 			<div id="channelForm" class="form-inline">
 				<label for="nameBox">Please write your name </label>
@@ -40,6 +47,7 @@
 <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVPtUwnFXt0-wEylg3qIQUaBoS2RAv5CE&sensor=true">
 </script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/js/xmartlocator.js"></script>
 <script type="text/javascript" src="/js/xmartchat.js"></script>
 <script type="text/javascript" src="/js/autogrow.js"></script>

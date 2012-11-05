@@ -1,0 +1,27 @@
+{
+  "author": {
+    "name": "Máximo Mussini",
+    "url": "https://github.com/ElMassimo",
+    "email": "maximo@xmartlabs.com"
+  },
+  "contributors": [
+    {
+      "name": "Xmartlabs",
+      "url": "http://github.com/xmartlabs",
+      "email": "getintouch@xmartlabs.com"
+    }
+  ],
+  "dependencies": {
+	  "mime": "1.2.x",
+	  "socket.io": "0.9.x"
+	},
+  "description": "A simple geographic chat application",
+  "devDependencies": {},
+  "main": "server.js",
+  "name": "map-chat",
+  "repository": {"url": "https://github.com/ElMassimo/map-chat", "type": "git"},
+  "version": "0.0.1",
+  "engines": {
+    "node": "0.6.x"
+  }
+}

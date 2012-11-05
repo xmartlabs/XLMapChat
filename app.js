@@ -39,6 +39,10 @@ httpServer = http.createServer(function(request, response) {
 });
 
 var webSocket = io.listen(httpServer);
+webSocket.configure(function () { 
+  webSocket.set("transports", ["xhr-polling"]); 
+  webSocket.set("polling duration", 10); 
+});
 
 var connectedUsers = new Object();
 

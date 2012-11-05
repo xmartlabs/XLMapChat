@@ -9,21 +9,28 @@
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap-responsive.min.css" media="all" />
 </head>
 <body>	
-	<div class="navbar">
+	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
-			<a href="#" class="brand">World Chat</a>
-			<ul class="nav">
-				<li><a href="/">Chat Room</a></li>
-				<li class="active"><a href="/users.html">Connected Users</a></li>
-			</ul>			
-			<div class="navbar-form form-search pull-right">
-			  <input type="search" placeholder="Filter..." class="input-medium search-query">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+	     	</a>
+				<a href="#" class="brand">World Chat</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li><a href="/">Chat Room</a></li>
+						<li class="active"><a href="/users.html">Connected Users</a></li>
+					</ul>			
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
+	<div class="container">
 		<div class="row-fluid">	
 			<h2>People currently connected...</h2>
+		  <input type="search" placeholder="Filter..." class="input-medium search-query pull-right">
 		</div>
 		<div class="row-fluid">				
 			<table class="table table-striped">
@@ -41,9 +48,11 @@
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
 <!-- <script type="text/javascript" src="/js/xmartlocatorusers.js"></script> -->
 <script>
 	var socket = io.connect(window.location.origin);
+	
 	var users = {};
 
 	socket.on("user disconnected", function(key){
