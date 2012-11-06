@@ -42,7 +42,10 @@
 		<div class="row-fluid">				
 			<div id="map_canvas" class="span8" style="min-height: 500px;"></div>
 			<div id="chatContainer" class="chat-container span4"></div>			
-		</div>
+		</div>		
+		<footer>
+			<small class="pull-right">Connected users: <span id="usersCount">0</span></small>
+		</footer>
 	</div>
 </body>
 <script src="/socket.io/socket.io.js"></script>
@@ -51,32 +54,32 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVPtUwnFXt0-wEylg3qIQUaBoS2RAv5CE&sensor=true">
 </script>
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/xmartutil.js"></script>
 <script type="text/javascript" src="/js/xmartlocator.js"></script>
 <script type="text/javascript" src="/js/xmartchat.js"></script>
 <script type="text/javascript" src="/js/autogrow.js"></script>
 <script>
 	var socket = io.connect(window.location.hostname);
 
-	function getUrlParameter(name){
-  	if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search)) {
-      return decodeURIComponent(name[1]);
-    }
-	}
-
 	function loadWorldChat(username){		
 		$('#channelForm').remove();
 		$("#userGreeting").html("Hello "+username+"!");
 
-		xmartlabschat.initialize(socket, username, "chatContainer");    
+		xmartlabsutil
+		xmartlabschat.initialize(username, socket, "chatContainer");    
 		xmartlabslocator.initialize(socket,'map_canvas');
+	}
 
-		socket.emit('register', { username : username });
+	function getUrlParameter(param){
+  	if(param=(new RegExp('[?&]'+encodeURIComponent(param)+'=([^&]*)')).exec(location.search)) {
+      return decodeURIComponent(param[1]);
+    }
 	}
 
 	var username = getUrlParameter("username");
 	if(username) {
 		loadWorldChat(username);
-	}else{		
+	} else {		
 		$('#createChannel').on('click',function(){
 			username = $("#nameBox").val();
 			loadWorldChat(username);

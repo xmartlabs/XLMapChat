@@ -5,26 +5,20 @@ var fs = require('fs'),
   mime = require('mime'),
   io = require('socket.io');
 
-fs.exists = fs.exists || require('path').exists;
-
-httpServer = http.createServer(function(request, response) {
+var httpServer = http.createServer(function(request, response) {
   var pathname = url.parse(request.url).pathname;
   if(pathname == "/") pathname = "index.html";
   var filename = path.join(process.cwd(), 'public', pathname);
 
-  fs.exists(filename, function(exists) {
+  path.exists(filename, function(exists) {
     if(!exists) {
-      response.writeHead(404, {
-        "Content-Type": "text/plain"
-      });
+      response.writeHead(404, { "Content-Type": "text/plain" });
       response.write("404 Not Found");
       response.end();
       return;
     }
 
-    response.writeHead(200, {
-      'Content-Type': mime.lookup(filename)
-    });
+    response.writeHead(200, { 'Content-Type': mime.lookup(filename) });
     fs.createReadStream(filename, {
       'flags': 'r',
       'encoding': 'binary',
@@ -38,31 +32,36 @@ httpServer = http.createServer(function(request, response) {
   });
 });
 
+var connectedUsers = {};
 var webSocket = io.listen(httpServer);
-webSocket.configure(function () { 
-  webSocket.set("transports", ["xhr-polling"]); 
-  webSocket.set("polling duration", 10); 
-});
 
-var connectedUsers = new Object();
+if(process.env.NODE_ENV == 'production') {
+  webSocket.configure(function () { 
+    webSocket.set("transports", ["xhr-polling"]); 
+    webSocket.set("polling duration", 10); 
+  });
+}
 
 webSocket.sockets.on('connection', function(socket) {
 
-  socket.on('register', function(userInfo) {
-    var userkey = Date.now();
-    socket.set('userkey', userkey);
-    connectedUsers[userkey] = userInfo;
-    console.log('User ', userInfo.username, ' has logged in. Key = ', userkey);
+  socket.on('register', function(user, sendKey) {
+    user.key = Date.now();
+    socket.set('userkey', user.key);
+    sendKey(user.key);
+
+    connectedUsers[user.key] = user;
+    socket.broadcast.emit("user connected", user);
   });
 
   socket.on('message', function(msg) {
     socket.get('userkey', function(err, key) {
       var user = connectedUsers[key];
       if(user) {
-        var data = new Object();
-        data.key = key;
-        data.sender = user.username;
-        data.message = msg;
+        var data = {
+          key : key,
+          sender : user.name,
+          message : msg
+        };
         socket.broadcast.emit('chat',data);
       }
     });
@@ -72,16 +71,15 @@ webSocket.sockets.on('connection', function(socket) {
       socket.emit("all locations",connectedUsers);
   });
 
-  socket.on("location update", function(data) {
+  socket.on("send location", function(data) {
     socket.get('userkey', function(err, key) {
       var user = connectedUsers[key];
       if(user) {
         user.lat = data.lat;
         user.lng = data.lng;
-
-        data.userKey = key;
-        data.username = user.name;
-        socket.broadcast.emit("location", data);
+        data.name = user.name
+        data.key = key;
+        socket.broadcast.emit("location update", data);
       }
     });
   });
@@ -95,11 +93,6 @@ webSocket.sockets.on('connection', function(socket) {
         socket.broadcast.emit("user disconnected", key);
       }
     });
-  });
-
-  socket.on('android', function(data) {
-    console.log('Android says: ', data);
-    socket.broadcast.emit('android', data);
   });
 });
 

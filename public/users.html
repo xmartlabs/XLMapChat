@@ -4,6 +4,8 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Xmartlabs chat</title>
+	<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" type="text/css" href="/css/xmartpushapp.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="all" />
 	<link rel="stylesheet" type="text/css" href="/css/bootstrap-responsive.min.css" media="all" />
@@ -36,8 +38,10 @@
 			<table class="table table-striped">
 			  <thead>
 			    <tr>
+			      <th>Key</th>
 			      <th>Name</th>
-			      <th>Connected</th>
+			      <th>Latitude</th>
+			      <th>Longitude</th>
 			    </tr>
 			  </thead>
 			  <tbody id="usersTable">
@@ -54,6 +58,23 @@
 	var socket = io.connect(window.location.hostname);
 	
 	var users = {};
+	var usersTable = $("#usersTable");
+
+	function addUser(user) {
+		var row = $("<tr id='user"+user.key+"'>");
+		$("<td>").html(user.key).appendTo(row);
+		$("<td>").html(user.name).appendTo(row);
+		$("<td>").html(user.lat).appendTo(row);
+		$("<td>").html(user.lng).appendTo(row);
+		usersTable.append(row);
+		users[key] = user;
+	}
+
+	socket.on("user connected", function(user){
+		var userRow = document.getElementById("user"+user.key);
+		if(!userRow)
+			addUser(user);
+	});
 
 	socket.on("user disconnected", function(key){
 		$("#user"+key).remove();
@@ -61,15 +82,8 @@
 	});
 
 	socket.on("all locations", function(data){
-		var usersTable = $("#usersTable");
-		for(key in data){
-			var user = data[key];
-			var row = $("<tr id='user"+key+"'>");
-			$("<td>").html(user.username).appendTo(row);
-			$("<td>").html("Yes").appendTo(row);
-			usersTable.append(row);
-			users[key] = user;
-		}
+		for(key in data)
+			addUser(data[key]);
 	});
 
 	socket.emit("request locations");
