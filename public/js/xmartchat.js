@@ -16,9 +16,9 @@ var xmartlabschat = {};
 
 		webSocket.on("user connected", addUser);
 		webSocket.on("user disconnected", removeUser);
-		webSocket.on('chat', receiveChatMessage);
+		webSocket.on('new chat msg', receiveChatMessage);
 
-		webSocket.emit('register', { name : user.name }, function(key){ user.key = key; });
+		webSocket.emit('join', { name : user.name }, function(key){ user.key = key; });
 	}
 
 	function addUser(user){
@@ -97,7 +97,8 @@ var xmartlabschat = {};
 		messageBox.on('keypress', onChatKeyPress);
 		sendButton.on('click', sendChatMessage);	
 
-		usersCount = $("#usersCount");
+		usersCount = $("#usersCount")
+		$("#usersCountContainer").show();
 
 		if(typeof $.fn.autogrow == 'function')
 			messageBox.autogrow();

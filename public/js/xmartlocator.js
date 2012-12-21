@@ -17,9 +17,8 @@ var xmartlabslocator = {};
 		xmartlabsutil.geolocation(showPosition);
 
 		webSocket.on('location update', updateMarker);
-		webSocket.on('all locations', loadMarkers);
 		webSocket.on('user disconnected', removeMarker);
-		webSocket.emit('request locations');
+		webSocket.emit('request locations', loadMarkers);
 
 		$(document).on('click', ".sender", showUserLocation);
 	}

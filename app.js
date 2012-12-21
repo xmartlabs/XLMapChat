@@ -44,7 +44,7 @@ if(process.env.NODE_ENV == 'production') {
 
 webSocket.sockets.on('connection', function(socket) {
 
-  socket.on('register', function(user, sendKey) {
+  socket.on('join', function(user, sendKey) {
     user.key = Date.now();
     socket.set('userkey', user.key);
     sendKey(user.key);
@@ -62,13 +62,9 @@ webSocket.sockets.on('connection', function(socket) {
           sender : user.name,
           message : msg
         };
-        socket.broadcast.emit('chat',data);
+        socket.broadcast.emit('new chat msg',data);
       }
     });
-  });
-
-  socket.on("request locations", function() {
-      socket.emit("all locations",connectedUsers);
   });
 
   socket.on("send location", function(data) {
@@ -82,6 +78,10 @@ webSocket.sockets.on('connection', function(socket) {
         socket.broadcast.emit("location update", data);
       }
     });
+  });
+
+  socket.on("request locations", function(fn) {
+    fn(connectedUsers);
   });
 
   socket.on('disconnect', function() {
