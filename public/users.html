@@ -19,7 +19,9 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 	     	</a>
-				<a href="#" class="brand">World Chat</a>
+				<a href="http://xmartlabs.com" class="brand">
+						<img class="xmart-logo" src="/img/xmartlabs.png" alt="Xmartlabs Logo"/>chat
+				</a>
 				<div class="nav-collapse">
 					<ul class="nav">
 						<li><a href="/">Chat Room</a></li>
@@ -81,11 +83,14 @@
 		delete users[key];
 	});
 
-	socket.on("all locations", function(data){
+	socket.on('location update', function(user){
+		addUser(user);
+		$("#user"+user.key).remove();
+	});
+
+	socket.emit("request locations",function(data){
 		for(key in data)
 			addUser(data[key]);
 	});
-
-	socket.emit("request locations");
 </script>
 </html>

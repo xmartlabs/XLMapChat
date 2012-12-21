@@ -17,11 +17,11 @@
 	},
   "description": "A simple geographic chat application",
   "devDependencies": {},
-  "main": "server.js",
+  "main": "app.js",
   "name": "map-chat",
   "repository": {"url": "https://github.com/ElMassimo/map-chat", "type": "git"},
   "version": "0.0.1",
   "engines": {
-    "node": "0.6.x"
+    "node": "0.8.x"
   }
 }
