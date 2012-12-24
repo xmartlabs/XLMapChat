@@ -80,8 +80,8 @@ webSocket.sockets.on('connection', function(socket) {
     });
   });
 
-  socket.on("request locations", function(fn) {
-    fn(connectedUsers);
+  socket.on("request locations", function(sendData) {
+    sendData(connectedUsers);
   });
 
   socket.on('disconnect', function() {

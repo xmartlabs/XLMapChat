@@ -64,8 +64,7 @@
 	function loadWorldChat(username){		
 		$('#channelForm').remove();
 		$("#userGreeting").html("Hello "+username+"!");
-
-		xmartlabsutil
+		
 		xmartlabschat.initialize(username, socket, "chatContainer");    
 		xmartlabslocator.initialize(socket,'map_canvas');
 	}

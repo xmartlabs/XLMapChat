@@ -23,7 +23,7 @@ var xmartlabslocator = {};
 		$(document).on('click', ".sender", showUserLocation);
 	}
 
-	function addMarker(lat, lng, title) {
+	function getMarker(lat, lng, title) {
 		return new google.maps.Marker({
 			title: title,
 			map: map,
@@ -37,7 +37,7 @@ var xmartlabslocator = {};
 			lng : position.coords.longitude,
 		}
 
-		myMarker = addMarker(data.lat, data.lng, 'Me');
+		myMarker = getMarker(data.lat, data.lng, 'Me');
 
 		map.setCenter(myMarker.getPosition());
 
@@ -54,26 +54,24 @@ var xmartlabslocator = {};
 			if(userMarker)			
 				map.setCenter(userMarker.getPosition());
 			else
-				alert("The user is no longer connected")
+				alert("The user is no longer connected (or did not share his location)");
 		}
 	}
 
 	function updateMarker(data) {
 		var marker = markers[data.key];
-
 		if(marker) {
 			marker.setPosition(new google.maps.LatLng(data.lat,data.lng));			
 		} else {
-			marker = addMarker(data.lat, data.lng, data.name);
+			markers[data.key] = getMarker(data.lat, data.lng, data.name);
 		}		
-		markers[data.key] = marker;
 	}
 
 	function loadMarkers(data) {
 		for(key in data) {
 			var user = data[key];
 			xmartlabschat.addUser(user);
-			markers[key] = addMarker(user.lat, user.lng, user.name);
+			markers[key] = getMarker(user.lat, user.lng, user.name);
 		}
 	}
 
